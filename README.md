@@ -1,6 +1,6 @@
 # C8EMU
 
-![screenshots/tetris-screenshot.png](Screenshot of the emulator playing Tetris.)
+![Screenshot of the emulator playing Tetris.](screenshots/tetris-screenshot.png)
 
 Portable and lightweight [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) emulator written in ANSI C 99 and SDL3.
 
