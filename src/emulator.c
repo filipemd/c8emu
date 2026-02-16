@@ -632,6 +632,13 @@ void emulator_tick(struct emulator* emulator) {
 #endif
 		}
 	}
+
+	if (emulator->_sound_timer == 1) {
+		emulator->beep_flag=true;	
+	} else {
+		emulator->beep_flag=false;
+	}
+
 	if (emulator->_delay_timer > 0) {
 		emulator->_delay_timer--;
 	}

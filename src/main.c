@@ -24,10 +24,11 @@
 #include <stdlib.h>
 
 #include "emulator.h"
+#include "beep.h"
 
 #define SCALE 10
 
-static const char* version="0.1.0";
+static const char* version="0.2.0";
 
 /* We will use this renderer to draw into this window every frame. */
 static SDL_Window *window = NULL;
@@ -55,6 +56,7 @@ static void init_emulator(int argc, char* argv[]) {
 	}
 
 	emulator_init(&emulator, argv[1]);
+	beep_init();
 	if (argc >= 3) {
 		const int cycles_per_frame_arg = atoi(argv[2]);
 		if (cycles_per_frame_arg <= 0 || cycles_per_frame_arg > 255) {
@@ -117,9 +119,16 @@ static void update_emulator(void) {
 		render_emulator();
 		SDL_RenderPresent(renderer);
 	}
+	if (emulator.beep_flag) {
+		beep_play();
+	}
 
 	// 60 FPS
 	SDL_Delay(16);
+}
+
+static void quit_emulator(void) {
+	beep_quit();
 }
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
@@ -127,7 +136,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 	(void)appstate;
 	SDL_SetAppMetadata("CH8EMU", "0.1.0", "com.filipemd.ch8emu");
 
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
 		return SDL_APP_FAILURE;
 	}
@@ -136,6 +145,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 		SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
 		return SDL_APP_FAILURE;
 	}
+
 	SDL_SetRenderLogicalPresentation(renderer, SCALE*EMULATOR_WIDTH, SCALE*EMULATOR_HEIGHT, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
 	init_emulator(argc, argv);
@@ -166,4 +176,6 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
 	(void)appstate;
 	(void)result;
+
+	quit_emulator();
 }

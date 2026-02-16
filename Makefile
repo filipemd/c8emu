@@ -26,7 +26,7 @@ CC       := gcc
 
 # O SDL3 geralmente requer o pkg-config para encontrar os cabeçalhos (.h) e bibliotecas (.so/.lib)
 FLAGS  := $(shell pkg-config --cflags sdl3)
-LIBS   := $(shell pkg-config --libs sdl3)
+LIBS   := $(shell pkg-config --libs sdl3) -lm
 
 # CFLAGS: 
 CFLAGS   := -Wall -Wextra -Wpedantic -std=c99 $(FLAGS) -I$(SRC_DIR) -MMD -MP
@@ -39,7 +39,7 @@ else
 	CFLAGS+=-O2
 endif
 
-SRCS     := src/main.c src/emulator.c
+SRCS     := src/main.c src/emulator.c src/beep.c
 # Mapeia src/arquivo.c para obj/arquivo.o
 OBJS     := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # Mapeia obj/arquivo.o para obj/arquivo.d (arquivos de dependência)

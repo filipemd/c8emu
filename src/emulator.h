@@ -36,6 +36,7 @@ struct emulator {
 	uint8_t screen[EMULATOR_WIDTH/8 * EMULATOR_HEIGHT];
 
 	bool draw_flag;
+	bool beep_flag;
 
 	// Cada bit uma tecla
 	uint16_t keys;
